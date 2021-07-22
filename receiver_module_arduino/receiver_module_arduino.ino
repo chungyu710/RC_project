@@ -1,6 +1,3 @@
-// interfacing NRF24L01 with SPI
-// ESP32
-
 /*
 * Arduino Wireless Communication Tutorial
 *       Example 1 - Receiver Code
@@ -9,15 +6,11 @@
 * 
 * Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
 */
-
-#define CE    2
-#define CSN   4
-
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(CE, CSN); // CE, CSN
+RF24 radio(7, 8); // CE, CSN
 const byte address[6] = "00001";
 
 void setup() {
@@ -26,12 +19,14 @@ void setup() {
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
+  Serial.println("start");
 }
 
 void loop() {
-  if (radio.available()) {  // check if there is data ready to be received
+  if (radio.available()) {
     char text[32] = "";
     radio.read(&text, sizeof(text));
+//    Serial.print("received: ");
     Serial.println(text);
   }
 }
