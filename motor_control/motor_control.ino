@@ -1,5 +1,15 @@
 // using L298N motor controller
 
+#include "Motor.h"
+
+#ifndef FULL_SPEED
+#define FULL_SPEED 255
+#endif
+
+#ifndef SPEED_GRADIENT
+#define SPEED_GRADIENT 3   // cannot be zero
+#endif
+
 #define ena 5
 #define in1 6
 #define in2 7
@@ -8,69 +18,34 @@
 #define in4 9
 #define enb 10
 
+// create motor objects
+Motor motorA(ena, in1, in2);
+Motor motorB(enb, in3, in4);
+
 void setup() {
-  // set pin modes
-  pinMode(ena, OUTPUT);
-  pinMode(in1, OUTPUT);
-  pinMode(in2, OUTPUT);
-
-  pinMode(in3, OUTPUT);
-  pinMode(in4, OUTPUT);
-  pinMode(enb, OUTPUT);
-
-  // turn off all motors upon boot up
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-  delay(2000);  // delay 2 seconds
+  motorA.stop();
+  motorB.stop();
+  delay(100);  // delay
 }
 
 void loop() {
-  // move motor A forward
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  analogWrite(ena, 255);
+  // move motors forward
+  motorA.forward(FULL_SPEED);
+  motorB.forward(FULL_SPEED);
+  delay(1000);  // delay
 
-  // move motor B forward
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  analogWrite(enb, 255);
+  // stop motors
+  motorA.stop();
+  motorB.stop();
+  delay(1000);  // delay
 
-  delay(2000);  // delay 2 seconds
+  // move motors backward
+  motorA.backward(FULL_SPEED);
+  motorB.backward(FULL_SPEED);
+  delay(1000);  // delay
 
-  // stop motor A
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  analogWrite(ena, 0);
-  
-  // stop motor B
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-  analogWrite(enb, 0);
-
-  delay(2000);  // delay 2 seconds
-
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  analogWrite(ena, 255);
-
-  // move motor B forward
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH);
-  analogWrite(enb, 255);
-
-  delay(2000);  // delay 2 seconds
-
-  // stop motor A
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  analogWrite(ena, 0);
-  
-  // stop motor B
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-  analogWrite(enb, 0);
-
-  delay(2000);
+  // stop motors
+  motorA.stop();
+  motorB.stop();
+  delay(1000);  // delay
 }
